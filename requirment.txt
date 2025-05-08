@@ -1,0 +1,35 @@
+# Flask and extensions
+flask==2.3.3
+flask-restful==0.3.10
+flask-cors==4.0.0
+python-dotenv==1.0.0
+
+# WSGI server
+gunicorn==21.2.0
+
+# HTTP requests (for PokéAPI and Quickwit API)
+requests==2.31.0
+urllib3==2.0.7
+
+# JSON handling
+jsonschema==4.19.1
+
+# Data processing
+pandas==2.1.1
+numpy==1.26.0
+
+# Serialization
+marshmallow==3.20.1
+pydantic==2.5.2
+
+# Development and testing
+pytest==7.4.3
+black==23.10.0
+flake8==6.1.0
+
+# Monitoring
+prometheus-flask-exporter==0.22.4
+structlog==23.2.0
+
+# Performance
+cachetools==5.3.1

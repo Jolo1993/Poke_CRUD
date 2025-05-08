@@ -1,0 +1,332 @@
+{
+  "version": "0.8",
+  "index": {
+    "version": "0.8",
+    "index_uid": "otel-traces-v0_7:01JTPC95EHD4MGRW7KE6NG59ES",
+    "index_config": {
+      "version": "0.8",
+      "index_id": "otel-traces-v0_7",
+      "index_uri": "file:///quickwit/qwdata/indexes/otel-traces-v0_7",
+      "doc_mapping": {
+        "field_mappings": [
+          {
+            "name": "trace_id",
+            "type": "bytes",
+            "fast": true,
+            "indexed": true,
+            "input_format": "hex",
+            "output_format": "hex",
+            "stored": true
+          },
+          {
+            "name": "trace_state",
+            "type": "text",
+            "fast": false,
+            "fieldnorms": false,
+            "indexed": false,
+            "stored": true
+          },
+          {
+            "name": "service_name",
+            "type": "text",
+            "fast": {
+              "normalizer": "raw"
+            },
+            "fieldnorms": false,
+            "indexed": true,
+            "record": "basic",
+            "stored": true,
+            "tokenizer": "raw"
+          },
+          {
+            "name": "resource_attributes",
+            "type": "json",
+            "expand_dots": true,
+            "fast": false,
+            "indexed": true,
+            "record": "basic",
+            "stored": true,
+            "tokenizer": "raw"
+          },
+          {
+            "name": "resource_dropped_attributes_count",
+            "type": "u64",
+            "coerce": true,
+            "fast": false,
+            "indexed": false,
+            "output_format": "number",
+            "stored": true
+          },
+          {
+            "name": "scope_name",
+            "type": "text",
+            "fast": false,
+            "fieldnorms": false,
+            "indexed": false,
+            "stored": true
+          },
+          {
+            "name": "scope_version",
+            "type": "text",
+            "fast": false,
+            "fieldnorms": false,
+            "indexed": false,
+            "stored": true
+          },
+          {
+            "name": "scope_attributes",
+            "type": "json",
+            "expand_dots": true,
+            "fast": false,
+            "indexed": false,
+            "stored": true
+          },
+          {
+            "name": "scope_dropped_attributes_count",
+            "type": "u64",
+            "coerce": true,
+            "fast": false,
+            "indexed": false,
+            "output_format": "number",
+            "stored": true
+          },
+          {
+            "name": "span_id",
+            "type": "bytes",
+            "fast": false,
+            "indexed": true,
+            "input_format": "hex",
+            "output_format": "hex",
+            "stored": true
+          },
+          {
+            "name": "span_kind",
+            "type": "u64",
+            "coerce": true,
+            "fast": false,
+            "indexed": true,
+            "output_format": "number",
+            "stored": true
+          },
+          {
+            "name": "span_name",
+            "type": "text",
+            "fast": {
+              "normalizer": "raw"
+            },
+            "fieldnorms": false,
+            "indexed": true,
+            "record": "basic",
+            "stored": true,
+            "tokenizer": "raw"
+          },
+          {
+            "name": "span_fingerprint",
+            "type": "text",
+            "fast": false,
+            "fieldnorms": false,
+            "indexed": true,
+            "record": "basic",
+            "stored": true,
+            "tokenizer": "raw"
+          },
+          {
+            "name": "span_start_timestamp_nanos",
+            "type": "datetime",
+            "fast": true,
+            "fast_precision": "milliseconds",
+            "indexed": false,
+            "input_formats": [
+              "unix_timestamp"
+            ],
+            "output_format": "unix_timestamp_nanos",
+            "stored": true
+          },
+          {
+            "name": "span_end_timestamp_nanos",
+            "type": "datetime",
+            "fast": false,
+            "fast_precision": "seconds",
+            "indexed": false,
+            "input_formats": [
+              "unix_timestamp"
+            ],
+            "output_format": "unix_timestamp_nanos",
+            "stored": true
+          },
+          {
+            "name": "span_duration_millis",
+            "type": "u64",
+            "coerce": true,
+            "fast": true,
+            "indexed": false,
+            "output_format": "number",
+            "stored": true
+          },
+          {
+            "name": "span_attributes",
+            "type": "json",
+            "expand_dots": true,
+            "fast": {
+              "normalizer": "raw"
+            },
+            "indexed": true,
+            "record": "basic",
+            "stored": true,
+            "tokenizer": "raw"
+          },
+          {
+            "name": "span_dropped_attributes_count",
+            "type": "u64",
+            "coerce": true,
+            "fast": false,
+            "indexed": false,
+            "output_format": "number",
+            "stored": true
+          },
+          {
+            "name": "span_dropped_events_count",
+            "type": "u64",
+            "coerce": true,
+            "fast": false,
+            "indexed": false,
+            "output_format": "number",
+            "stored": true
+          },
+          {
+            "name": "span_dropped_links_count",
+            "type": "u64",
+            "coerce": true,
+            "fast": false,
+            "indexed": false,
+            "output_format": "number",
+            "stored": true
+          },
+          {
+            "name": "span_status",
+            "type": "json",
+            "expand_dots": true,
+            "fast": false,
+            "indexed": true,
+            "record": "basic",
+            "stored": true,
+            "tokenizer": "raw"
+          },
+          {
+            "name": "parent_span_id",
+            "type": "bytes",
+            "fast": false,
+            "indexed": false,
+            "input_format": "hex",
+            "output_format": "hex",
+            "stored": true
+          },
+          {
+            "name": "is_root",
+            "type": "bool",
+            "fast": false,
+            "indexed": true,
+            "stored": false
+          },
+          {
+            "name": "events",
+            "type": "array<json>",
+            "expand_dots": true,
+            "fast": {
+              "normalizer": "raw"
+            },
+            "indexed": true,
+            "record": "basic",
+            "stored": true,
+            "tokenizer": "raw"
+          },
+          {
+            "name": "event_names",
+            "type": "array<text>",
+            "fast": false,
+            "fieldnorms": false,
+            "indexed": true,
+            "record": "position",
+            "stored": false,
+            "tokenizer": "default"
+          },
+          {
+            "name": "links",
+            "type": "array<json>",
+            "expand_dots": true,
+            "fast": false,
+            "indexed": true,
+            "record": "basic",
+            "stored": true,
+            "tokenizer": "raw"
+          }
+        ],
+        "tag_fields": [],
+        "store_source": false,
+        "index_field_presence": false,
+        "timestamp_field": "span_start_timestamp_nanos",
+        "mode": "strict",
+        "max_num_partitions": 200,
+        "tokenizers": []
+      },
+      "indexing_settings": {
+        "commit_timeout_secs": 5,
+        "docstore_compression_level": 8,
+        "docstore_blocksize": 1000000,
+        "split_num_docs_target": 10000000,
+        "merge_policy": {
+          "type": "stable_log",
+          "min_level_num_docs": 100000,
+          "merge_factor": 10,
+          "max_merge_factor": 12,
+          "maturation_period": "2days"
+        },
+        "resources": {
+          "heap_size": "2.0 GB"
+        }
+      },
+      "search_settings": {
+        "default_search_fields": [
+          "service_name",
+          "span_name",
+          "event_names"
+        ]
+      },
+      "retention": null
+    },
+    "checkpoint": {
+      "_ingest-api-source": {},
+      "_ingest-cli-source": {},
+      "_ingest-source": {}
+    },
+    "create_timestamp": 1746655286,
+    "sources": [
+      {
+        "version": "0.8",
+        "source_id": "_ingest-api-source",
+        "num_pipelines": 1,
+        "enabled": true,
+        "source_type": "ingest-api",
+        "input_format": "json"
+      },
+      {
+        "version": "0.8",
+        "source_id": "_ingest-cli-source",
+        "num_pipelines": 1,
+        "enabled": true,
+        "source_type": "ingest-cli",
+        "input_format": "json"
+      },
+      {
+        "version": "0.8",
+        "source_id": "_ingest-source",
+        "num_pipelines": 1,
+        "enabled": false,
+        "source_type": "ingest",
+        "input_format": "json"
+      }
+    ]
+  },
+  "splits": [],
+  "delete_tasks": []
+}
