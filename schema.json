@@ -1,135 +1,154 @@
-version: 0.4
-
-index_id: pokemon_index
-
-doc_mapping:
-  mode: strict
-  field_mappings:
-    - name: id
-      type: i64
-      fast: true
-    - name: name
-      type: text
-      tokenizer: default
-      record: position
-      stored: true
-      fast: true
-    - name: species
-      type: text
-      tokenizer: default
-    - name: height
-      type: i64
-      fast: true
-    - name: weight
-      type: i64
-      fast: true
-    - name: base_experience
-      type: i64
-      fast: true
-    - name: types
-      type: text
-      tokenizer: default
-      record: position
-      stored: true
-    - name: abilities
-      type: text
-      tokenizer: default
-      record: position
-      stored: true
-    - name: hidden_abilities
-      type: text
-      tokenizer: default
-    - name: stats
-      type: object
-      field_mappings:
-        - name: hp
-          type: i64
-          fast: true
-        - name: attack
-          type: i64
-          fast: true
-        - name: defense
-          type: i64
-          fast: true
-        - name: special_attack
-          type: i64
-          fast: true
-        - name: special_defense
-          type: i64
-          fast: true
-        - name: speed
-          type: i64
-          fast: true
-    - name: sprites
-      type: object
-      field_mappings:
-        - name: front_default
-          type: text
-          stored: true
-        - name: back_default
-          type: text
-          stored: true
-        - name: front_shiny
-          type: text
-        - name: back_shiny
-          type: text
-    - name: moves
-      type: array
-      field_mappings:
-        - name: name
-          type: text
-          tokenizer: default
-          record: position
-        - name: level_learned_at
-          type: i64
-    - name: game_indices
-      type: array
-      field_mappings:
-        - name: version_name
-          type: text
-        - name: game_index
-          type: i64
-    - name: generation
-      type: text
-      tokenizer: default
-      fast: true
-    - name: capture_rate
-      type: i64
-      fast: true
-    - name: habitat
-      type: text
-      tokenizer: default
-    - name: color
-      type: text
-      tokenizer: default
-    - name: evolution_chain_id
-      type: i64
-    - name: flavor_text
-      type: text
-      tokenizer: default
-      record: position
-    - name: timestamp
-      type: datetime
-      fast: true
-      input_formats:
-        - rfc3339
-        - unix_timestamp
-      precision: seconds
-
-search_settings:
-  default_search_fields: [name, types, abilities, moves.name, flavor_text]
-
-tokenizers:
-  - name: default
-    type: unicode
-    filter: lowercase
-
-indexing_settings:
-  commit_timeout_secs: 10
-  docstore_compression_level: 3
-  merge_policy:
-    type: stable_log
-    max_merge_factor: 10
-    min_merge_factor: 8
-    max_merge_fanout: 4
+{
+  "version": "0.7",
+  "index_id": "pokemon",
+  "doc_mapping": {
+    "mode": "dynamic",
+    "field_mappings": [
+      {
+        "name": "id",
+        "type": "u64",
+        "fast": true,
+        "indexed": true
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "tokenizer": "default",
+        "record": "position",
+        "stored": true,
+        "fast": true
+      },
+      {
+        "name": "name_exact",
+        "type": "text",
+        "tokenizer": "raw",
+        "indexed": true,
+        "fast": true
+      },
+      {
+        "name": "types",
+        "type": "array<text>",
+        "tokenizer": "raw",
+        "fast": true,
+        "indexed": true
+      },
+      {
+        "name": "height",
+        "type": "f64",
+        "fast": true
+      },
+      {
+        "name": "weight",
+        "type": "f64",
+        "fast": true
+      },
+      {
+        "name": "hp",
+        "type": "i64",
+        "fast": true
+      },
+      {
+        "name": "attack",
+        "type": "i64",
+        "fast": true
+      },
+      {
+        "name": "defense",
+        "type": "i64",
+        "fast": true
+      },
+      {
+        "name": "special_attack",
+        "type": "i64",
+        "fast": true
+      },
+      {
+        "name": "special_defense",
+        "type": "i64",
+        "fast": true
+      },
+      {
+        "name": "speed",
+        "type": "i64",
+        "fast": true
+      },
+      {
+        "name": "abilities",
+        "type": "array<text>",
+        "tokenizer": "raw",
+        "fast": true,
+        "indexed": true
+      },
+      {
+        "name": "hidden_abilities",
+        "type": "array<text>",
+        "tokenizer": "raw",
+        "fast": true,
+        "indexed": true
+      },
+      {
+        "name": "generation",
+        "type": "u64",
+        "fast": true,
+        "indexed": true
+      },
+      {
+        "name": "evolution_chain",
+        "type": "array<u64>",
+        "fast": true
+      },
+      {
+        "name": "is_legendary",
+        "type": "bool",
+        "fast": true
+      },
+      {
+        "name": "is_mythical",
+        "type": "bool",
+        "fast": true
+      },
+      {
+        "name": "species",
+        "type": "text",
+        "tokenizer": "raw",
+        "fast": true
+      },
+      {
+        "name": "move_names",
+        "type": "array<text>",
+        "tokenizer": "raw",
+        "indexed": true
+      },
+      {
+        "name": "move_types",
+        "type": "array<text>",
+        "tokenizer": "raw",
+        "indexed": true
+      },
+      {
+        "name": "moves_json",
+        "type": "json",
+        "indexed": false,
+        "stored": true
+      },
+      {
+        "name": "_all_text",
+        "type": "text",
+        "tokenizer": "default",
+        "record": "position"
+      }
+    ],
+    "dynamic_mapping": {
+      "tokenizer": "raw",
+      "indexed": true,
+      "record": "basic"
+    }
+  },
+  "search_settings": {
+    "default_search_fields": ["name", "_all_text"]
+  },
+  "indexing_settings": {
+    "commit_timeout_secs": 30
+  }
+}
 
