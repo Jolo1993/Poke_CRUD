@@ -48,7 +48,7 @@ class QuickwitClient:
             index_id: The target index ID
             docs: List of documents to ingest
         """
-        return self._request("POST", f"/api/v1/indexes/{index_id}/ingest",
+        return self._request("POST", f"/api/v1/{index_id}/ingest",
                              json={"documents": docs})
 
     # Search

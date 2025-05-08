@@ -5,19 +5,19 @@ from typing import Dict
 import time
 
 # Environment variables with defaults
-index = os.environ.get('index_name', 'pokemon_index')
-dst_url = os.environ.get('dst_url', 'http://localhost:7280/api/v1')
+index = os.environ.get('index_name', 'pokemon')
+dst_url = os.environ.get('dst_url', 'http://localhost:7280/')
 src_url = os.environ.get('src_url', 'https://pokeapi.co/api/v2/pokemon')
 pokemon_id = 1
 
 
 def load(url):
-    print(f"DEBUG: Making request to {url}")
+    # print(f"DEBUG: Making request to {url}")
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
     }
     response = req.get(url, headers=headers)
-    print(f"DEBUG: Response status code: {response.status_code}")
+    # print(f"DEBUG: Response status code: {response.status_code}")
 
     if response.status_code == 200:
         return response.json()
@@ -28,16 +28,16 @@ def load(url):
 
 def upload_data(index_name, data):
     try:
-        print(f"DEBUG: Initializing QuickwitClient with base_url={dst_url}")
+        # print(f"DEBUG: Initializing QuickwitClient with base_url={dst_url}")
         client = QuickwitClient(base_url=dst_url)
 
-        print(f"DEBUG: Preparing to upload document to index: {index_name}")
-        print(f"DEBUG: Document sample (first 100 chars): {
+        # print(f"DEBUG: Preparing to upload document to index: {index_name}")
+        # print(f"DEBUG: Document sample (first 100 chars): {
               str(data)[:100]}...")
 
         # Use ingest method instead of index_documents
         result = client.ingest(index_name, data)
-        print(f"DEBUG: Upload completed with result: {result}")
+        # print(f"DEBUG: Upload completed with result: {result}")
         return True
     except Exception as e:
         print(f"ERROR during upload: {type(e).__name__}: {e}")
