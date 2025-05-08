@@ -33,7 +33,7 @@ def upload_data(index_name, data):
 
         # print(f"DEBUG: Preparing to upload document to index: {index_name}")
         # print(f"DEBUG: Document sample (first 100 chars): {
-              str(data)[:100]}...")
+        # str(data)[:100]}...")
 
         # Use ingest method instead of index_documents
         result = client.ingest(index_name, data)
