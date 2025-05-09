@@ -1,2 +1,3 @@
 quickwit_dev/qwdata/queues/wal-*
 qwdata/*
+__pycache__

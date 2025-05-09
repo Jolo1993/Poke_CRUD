@@ -6,8 +6,8 @@ import os
 
 app = Flask(__name__)
 
-quickwit_url = os.getenv()
-index_id = os.getenv()
+quickwit_url = os.getenv('dst_url', 'http://localhost:7280/')
+index_id = os.getenv('index_name', 'pokemon')
 client = QuickwitClient(quickwit_url)
 
 
