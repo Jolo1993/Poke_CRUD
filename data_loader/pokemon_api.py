@@ -56,9 +56,9 @@ if __name__ == "__main__":
         pokemon_url = f"{src_url}/{pokemon_id}"
         try:
             # Manual test (optional)
-            print(
-                f"You can test this URL manually with: curl -s '{pokemon_url}' | head")
-
+            # print(
+            #     f"You can test this URL manually with: curl -s '{pokemon_url}' | head")
+            #
             # API request with retry
             max_retries = 3
             for attempt in range(max_retries):
