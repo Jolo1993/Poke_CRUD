@@ -1,9 +1,0 @@
-{
-  "version": "0.8",
-  "indexes": {
-    "otel-logs-v0_7": "active",
-    "otel-traces-v0_7": "active",
-    "pokemon": "active"
-  },
-  "templates": []
-}
