@@ -1,7 +1,6 @@
 import requests as req
 import os
 from quickwit_client import QuickwitClient
-from typing import Dict
 import time
 
 # Environment variables with defaults
