@@ -1,8 +1,6 @@
 from quickwit_client import QuickwitClient
-from flask import Flask, render_template, jsonify, request
 import os
-import sys
-sys.path.append('CRUD_flask/local_libs/')
+from flask import Flask, render_template, jsonify, request
 # Now you can import your modules
 
 
@@ -25,7 +23,7 @@ def search():
         return jsonify({'results': []})
 
     try:
-        response = QuickwitClient.search(index_id,
+        response = QuickwitClient.search(index_id=index_id,
                                          query=query,
                                          max_hits=20
                                          )

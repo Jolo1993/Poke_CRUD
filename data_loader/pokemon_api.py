@@ -2,8 +2,6 @@ import requests as req
 import os
 from quickwit_client import QuickwitClient
 import time
-import sys
-sys.path.append('CRUD_flask/local_libs/')
 
 # Environment variables with defaults
 index = os.getenv('index_name', 'pokemon')
