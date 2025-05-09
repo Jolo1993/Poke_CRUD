@@ -1,5 +1,6 @@
-##Dev flow
-###Key Files to Implement
+#Dev flow
+
+##Key Files to Implement
 
     app.py - Main entry point for your Flask application
     app/__init__.py - Flask application factory
@@ -9,7 +10,7 @@
     docker/Dockerfile - Container configuration
     kubernetes/app-deployment.yaml - Kubernetes deployment
 
-###Development Flow
+##Development Flow
 
     Start by implementing the data pipeline to fetch Pokémon data
     Set up Quickwit integration services
