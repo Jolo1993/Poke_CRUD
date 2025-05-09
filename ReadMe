@@ -19,3 +19,12 @@ Development Flow
 
 This structure provides a clean separation of concerns and follows best practices for a Flask
 application with a data pipeline component.
+
+
+
+
+
+
+
+setup test env
+docker run -d --rm -v $(pwd)/qwdata:/quickwit/qwdata -p 127.0.0.1:7280:7280 quickwit/quickwit run
