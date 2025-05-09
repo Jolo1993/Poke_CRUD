@@ -4,9 +4,9 @@ from quickwit_client import QuickwitClient
 import time
 
 # Environment variables with defaults
-index = os.environ.get('index_name', 'pokemon')
-dst_url = os.environ.get('dst_url', 'http://localhost:7280/')
-src_url = os.environ.get('src_url', 'https://pokeapi.co/api/v2/pokemon')
+index = os.getenv('index_name', 'pokemon')
+dst_url = os.getenv('dst_url', 'http://localhost:7280/')
+src_url = os.getenv('src_url', 'https://pokeapi.co/api/v2/pokemon')
 pokemon_id = 1
 
 
