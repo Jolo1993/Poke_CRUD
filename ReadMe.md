@@ -25,6 +25,7 @@ application with a data pipeline component.
 
 
 ## Setup test env
-
+```bash
 mkdir qwdata
 docker run -d --rm -v $(pwd)/qwdata:/quickwit/qwdata -p 127.0.0.1:7280:7280 quickwit/quickwit run
+```
