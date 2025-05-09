@@ -12,8 +12,8 @@
 
 ## Development Flow
 
- - [ ]    Start by implementing the data pipeline to fetch Pokémon data
- - [ ]    Set up Quickwit integration services
+ - [x]    Start by implementing the data pipeline to fetch Pokémon data
+ - [x]    Set up Quickwit integration services
  - [ ]    Develop Flask CRUD API endpoints
  - [ ]    Containerize the application
  - [ ]    Create Kubernetes deployment files
