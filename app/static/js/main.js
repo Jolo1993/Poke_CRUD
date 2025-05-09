@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('search-input');
     const searchButton = document.getElementById('search-button');
-    const loadDataButton = document.getElementById('load-data-button');
     const resultsContainer = document.getElementById('results-container');
 
     // Search functionality
@@ -11,9 +10,6 @@ document.addEventListener('DOMContentLoaded', function() {
             performSearch();
         }
     });
-
-    // Load data functionality
-    loadDataButton.addEventListener('click', loadPokeData);
 
     // Function to perform search
     function performSearch() {
@@ -43,29 +39,6 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .catch(error => {
                 resultsContainer.innerHTML = `<p>Error: ${error.message}</p>`;
-            });
-    }
-
-    // Function to load Pokemon data
-    function loadPokeData() {
-        loadDataButton.disabled = true;
-        loadDataButton.textContent = 'Loading...';
-
-        fetch('/load_data')
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    alert(`Error: ${data.error}`);
-                } else {
-                    alert(data.message);
-                }
-            })
-            .catch(error => {
-                alert(`Error: ${error.message}`);
-            })
-            .finally(() => {
-                loadDataButton.disabled = false;
-                loadDataButton.textContent = 'Load Data from PokéAPI';
             });
     }
 
