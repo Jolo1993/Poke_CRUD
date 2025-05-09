@@ -101,4 +101,4 @@ if __name__ == "__main__":
             break
 
         # Next Pokemon
-        pokemon_id += 1024
+        pokemon_id += 10
