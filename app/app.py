@@ -23,11 +23,11 @@ def search():
         return jsonify({'results': []})
 
     try:
-        response = QuickwitClient.search(index_id=index_id,
-                                         query=query,
-                                         max_hits=20
-                                         )
-        return jsonify({'results': response.hits})
+        response = client.search(index_id=index_id,
+                                 query=query,
+                                 max_hits=20
+                                 )
+        return jsonify({'results': response['hits']})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

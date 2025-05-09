@@ -78,7 +78,7 @@ class QuickwitClient:
         if sort_by:
             params["sort_by"] = sort_by
 
-        return self._request("POST", f"/api/v1/indexes/{index_id}/search", json=params)
+        return self._request("POST", f"/api/v1/{index_id}/search", json=params)
 
     # Health check
     def health(self) -> Dict:
