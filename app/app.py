@@ -16,46 +16,60 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/search')
+@app.route('/search', methods=['POST'])
 def search_endpoint():
-    # Get query and selected indexes
-    raw_query = request.args.get('query', '').strip()
-    indexes = request.args.getlist('index') or ['pokemon']
+    # Handle POST request with JSON payload
+    data = request.get_json()
+    if not data:
+        return jsonify({'error': 'No JSON data provided'}), 400
+
+    raw_query = data.get('query', '').strip()
+    indexes = data.get('indexes', ['pokemon'])
+    max_hits = data.get('max_hits', 20)
 
     if not raw_query:
         return jsonify({'results': []})
 
     try:
-        # Transform to _all_text search
-        search_query = f'_all_text:{raw_query}'
+        # Transform to _all_text search if needed
+        if ':' not in raw_query:
+            search_query = f'_all_text:{raw_query}'
+        else:
+            search_query = raw_query  # Keep as-is if it already has field:value format
 
         all_results = []
         total_hits = 0
 
         # Search each selected index
         for index_id in indexes:
-            response = client.search(
-                index_id=index_id,
-                query=search_query,
-                max_hits=20
-            )
+            try:
+                # Use your client's search method directly
+                response = client.search(
+                    index_id=index_id,
+                    query=search_query,
+                    max_hits=max_hits
+                )
 
-            # Process results from this index
-            index_results = []
-            for hit in response.get('hits', []):
-                # Extract document (handle nested structure if needed)
-                if 'documents' in hit.get('document', {}):
-                    doc = hit['document']['documents']
-                else:
-                    doc = hit['document']
+                # Process results from this index
+                index_results = []
+                for hit in response.get('hits', []):
+                    # Extract document (handle nested structure if needed)
+                    if 'documents' in hit.get('document', {}):
+                        doc = hit['document']['documents']
+                    else:
+                        doc = hit['document']
 
-                # Add index info to result
-                doc['_index'] = index_id
-                index_results.append(doc)
+                    # Add index info to result
+                    doc['_index'] = index_id
+                    index_results.append(doc)
 
-            # Add to combined results
-            all_results.extend(index_results)
-            total_hits += response.get('num_hits', 0)
+                # Add to combined results
+                all_results.extend(index_results)
+                total_hits += response.get('num_hits', 0)
+
+            except Exception as index_error:
+                print(f"Error searching index {index_id}: {str(index_error)}")
+                # Continue with other indexes if one fails
 
         return jsonify({
             'query': raw_query,
@@ -75,32 +89,22 @@ def list_indexes():
         # Get all indexes
         response = client.list_indexes()
 
-        # Debug the actual structure
-        # print(f"Type of response: {type(response)}")
-        # print(f"Response content: {response}")
-
-        # Handle different possible structures
-        if isinstance(response, dict) and 'indexes' in response:
-            indexes_data = response['indexes']
-        elif isinstance(response, list):
-            indexes_data = response
-        else:
-            # If unexpected structure, return what we found
-            return jsonify({
-                'error': 'Unexpected response structure',
-                'response_type': str(type(response)),
-                'response': response
-            }), 500
-
         # Return formatted index information
         indexes = []
-        for index in indexes_data:
-            # Safely access data with .get()
+        for index in response:
+            # Extract the correct fields from the nested structure
+            index_config = index.get('index_config', {})
+            index_id = index_config.get('index_id', 'Unknown')
+
+            # Get checkpoint info (might indicate number of docs)
+            checkpoint = index.get('checkpoint', {})
+            # Rough approximation of doc count based on checkpoint
+            doc_count = sum(1 for cp in checkpoint.values() if cp)
+
             indexes.append({
-                'id': index.get('index_id'),
-                'doc_count': index.get('num_docs', 0),
-                'description': index.get('metadata', {}).get('description', '') if index.get('metadata') else '',
-                'created': index.get('created_at')
+                'id': index_id,
+                'doc_count': doc_count,
+                'description': index_config.get('search_settings', {}).get('default_search_fields', [])
             })
 
         return jsonify(indexes)
