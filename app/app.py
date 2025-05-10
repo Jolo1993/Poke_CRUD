@@ -7,7 +7,6 @@ from flask import Flask, render_template, jsonify, request
 app = Flask(__name__)
 
 quickwit_url = os.getenv('dst_url', 'http://localhost:7280/')
-index_id = os.getenv('index_name', 'pokemon')
 client = QuickwitClient(quickwit_url)
 
 
@@ -18,15 +17,14 @@ def index():
 
 @app.route('/search', methods=['POST'])
 def search_endpoint():
-    # Handle POST request with JSON payloa
-    print("Received search request:")
-    print(f"Content-Type: {request.headers.get('Content-Type')}")
-    print(f"Raw data: {request.data}")
+    # Get JSON data from the request
     data = request.get_json()
     if not data:
         return jsonify({'error': 'No JSON data provided'}), 400
 
     raw_query = data.get('query', '').strip()
+
+    # Get indexes from request or use pokemon as fallback
     indexes = data.get('indexes', ['pokemon'])
     max_hits = data.get('max_hits', 20)
 
@@ -38,41 +36,27 @@ def search_endpoint():
         if ':' not in raw_query:
             search_query = f'_all_text:{raw_query}'
         else:
-            search_query = raw_query  # Keep as-is if it already has field:value format
+            search_query = raw_query
 
         all_results = []
         total_hits = 0
 
         # Search each selected index
         for index_id in indexes:
-            try:
-                # Use your client's search method directly
-                response = client.search(
-                    index_id=index_id,
-                    query=search_query,
-                    max_hits=max_hits
-                )
+            response = client.search(
+                index_id=index_id,
+                query=search_query,
+                max_hits=max_hits
+            )
 
-                # Process results from this index
-                index_results = []
-                for hit in response.get('hits', []):
-                    # Extract document (handle nested structure if needed)
-                    if 'documents' in hit.get('document', {}):
-                        doc = hit['document']['documents']
-                    else:
-                        doc = hit['document']
+            # Process results
+            if response and 'hits' in response:
+                for hit in response['hits']:
+                    doc = hit.get('document', {})
+                    doc['_index'] = index_id  # Add index name to each result
+                    all_results.append(doc)
 
-                    # Add index info to result
-                    doc['_index'] = index_id
-                    index_results.append(doc)
-
-                # Add to combined results
-                all_results.extend(index_results)
                 total_hits += response.get('num_hits', 0)
-
-            except Exception as index_error:
-                print(f"Error searching index {index_id}: {str(index_error)}")
-                # Continue with other indexes if one fails
 
         return jsonify({
             'query': raw_query,
@@ -80,9 +64,7 @@ def search_endpoint():
             'results': all_results,
             'total': total_hits
         })
-
     except Exception as e:
-        print(f"Search error: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 
@@ -98,12 +80,6 @@ def list_indexes():
             # Extract the correct fields from the nested structure
             index_config = index.get('index_config', {})
             index_id = index_config.get('index_id', 'Unknown')
-
-            # Get checkpoint info (might indicate number of docs)
-            checkpoint = index.get('checkpoint', {})
-            # Rough approximation of doc count based on checkpoint
-            doc_count = sum(1 for cp in checkpoint.values() if cp)
-
             indexes.append({
                 'id': index_id,
                 'doc_count': doc_count,

@@ -23,14 +23,15 @@ function performSearch() {
         return;
     }
 
-    // Get selected indexes
+    // Get selected indexes from checkboxes
     const selectedIndexes = [];
     document.querySelectorAll('input[name="index"]:checked').forEach(checkbox => {
         selectedIndexes.push(checkbox.value);
     });
 
+    // Use default if nothing selected
     if (selectedIndexes.length === 0) {
-        selectedIndexes.push('pokemon'); // Default to Pokemon index
+        selectedIndexes.push('pokemon');
     }
 
     // Create JSON payload for POST request
