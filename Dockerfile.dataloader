@@ -26,7 +26,6 @@ RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
 
 # Copy only necessary data loader files
 COPY data_loader/pokemon_api.py .
-COPY schema.json .
 COPY --from=builder /local_libs /local_libs
 
 # Set correct permissions

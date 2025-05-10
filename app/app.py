@@ -19,6 +19,7 @@ def index():
 def search_endpoint():
     # Get JSON data from the request
     data = request.get_json()
+    app.logger.debug(f"Search request received: {data}")
     if not data:
         return jsonify({'error': 'No JSON data provided'}), 400
 
@@ -34,13 +35,13 @@ def search_endpoint():
     try:
         # Transform to _all_text search if needed
         if ':' not in raw_query:
-            search_query = f'_all_text:{raw_query}'
+            search_query = f'documents.name:{raw_query}'
         else:
             search_query = raw_query
 
         all_results = []
         total_hits = 0
-
+        app.logger.debug(f"Transformed query: {search_query}")
         # Search each selected index
         for index_id in indexes:
             response = client.search(
@@ -48,7 +49,7 @@ def search_endpoint():
                 query=search_query,
                 max_hits=max_hits
             )
-
+            app.logger.debug(f"Raw response from Quickwit: {response}")
             # Process results
             if response and 'hits' in response:
                 for hit in response['hits']:
@@ -64,6 +65,7 @@ def search_endpoint():
             'results': all_results,
             'total': total_hits
         })
+        app.logger.debug(f"Returning {len(all_results)} results")
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

@@ -25,7 +25,7 @@ RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
     && rm -rf /wheels
 
 # Copy only necessary application files
-COPY app/app.py app/static app/templates ./
+COPY app/ ./
 COPY --from=builder /local_libs /local_libs
 
 # Set correct permissions
