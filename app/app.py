@@ -49,7 +49,7 @@ def search_endpoint():
                 query=search_query,
                 max_hits=max_hits
             )
-            app.logger.debug(f"Raw response from Quickwit: {response}")
+            # app.logger.debug(f"Raw response from Quickwit: {response}") DEBUG LINE
             # Process results
             if response and 'hits' in response:
                 for hit in response['hits']:
