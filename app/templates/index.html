@@ -3,11 +3,10 @@
 {% block content %}
 <section class="search-section">
     <div class="search-container">
-        <input type="text" id="search-input" placeholder="Search Pokémon...">
+        <input type="text" id="search-input" placeholder="Search Pokémon by name, type, or attribute...">
         <button id="search-button">Search</button>
     </div>
 
-    <!-- Add this new div for index selection -->
     <div class="index-selection">
         <h4>Search in:</h4>
         <div id="index-checkboxes">
@@ -15,10 +14,15 @@
         </div>
     </div>
 
-    <!-- Your other controls can go here -->
+    <div id="result-count"></div>
 </section>
 
 <section class="results-section">
-    <div id="results-container"></div>
+    <div id="results-container">
+        <div class="no-results">
+            <p>Enter a search term above to find Pokémon.</p>
+            <p>Try searching for a name like "pikachu" or a type like "dragon".</p>
+        </div>
+    </div>
 </section>
 {% endblock %}

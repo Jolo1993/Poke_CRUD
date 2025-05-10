@@ -1,11 +1,12 @@
+# Build stage
 FROM python:3.12-slim as builder
 
 WORKDIR /build
 
-# Install build dependencies
+# Install build dependencies and set pip configuration for optimization
 COPY requirement.txt .
-RUN pip install --no-cache-dir wheel
-RUN pip wheel --no-cache-dir --wheel-dir=/build/wheels -r requirement.txt
+RUN pip install --no-cache-dir --upgrade pip wheel \
+    && pip wheel --no-cache-dir --wheel-dir=/build/wheels -r requirement.txt
 
 # Install local library into wheels
 COPY local_libs/ /local_libs/
@@ -14,8 +15,18 @@ RUN pip wheel --no-cache-dir --wheel-dir=/build/wheels -e /local_libs/
 # Runtime stage
 FROM python:3.12-slim AS runtime
 
+# Add metadata labels
+LABEL description="Pokemon Quickwit Visualizer"
+LABEL version="0.1.0"
+
 # Create a non-root user
 RUN groupadd -r -g 10001 appuser && useradd -r -u 10001 -g appuser appuser
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONPATH=/app \
+    PORT=5000
 
 WORKDIR /app
 
@@ -24,18 +35,27 @@ COPY --from=builder /build/wheels /wheels
 RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
     && rm -rf /wheels
 
-# Copy only necessary application files
+# Copy application files
 COPY app/ ./
 COPY --from=builder /local_libs /local_libs
+
+# Create static directory structure if needed
+RUN mkdir -p /app/static/images /app/static/js /app/static/css \
+    && chown -R appuser:appuser /app
 
 # Set correct permissions
 RUN chown -R appuser:appuser /app
 
-# Expose port
-EXPOSE 5000
+# Set up health check
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD curl -f http://localhost:$PORT/ || exit 1
+
+# Expose port (using environment variable)
+EXPOSE $PORT
 
 # Switch to non-root user
 USER 10001
 
-# Run the application
-CMD ["python", "app.py"]
+# Command with exec form for better signal handling
+ENTRYPOINT ["python"]
+CMD ["app.py"]

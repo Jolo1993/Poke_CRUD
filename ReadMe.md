@@ -2,20 +2,20 @@
 
 ## Key Files to Implement
 
- - [ ]    app.py - Main entry point for your Flask application
- - [ ]    app/__init__.py - Flask application factory
- - [ ]    app/api/routes.py - Define your CRUD endpoints
- - [ ]    app/services/quickwit_service.py - Quickwit integration logic
- - [ ]    data_pipeline/fetcher.py - PokéAPI data fetching
- - [ ]    docker/Dockerfile - Container configuration
+ - [x]    app.py - Main entry point for your Flask application
+ - [x]    app/__init__.py - Flask application factory
+ - [x]    app/api/routes.py - Define your CRUD endpoints
+ - [x]    app/services/quickwit_service.py - Quickwit integration logic
+ - [x]    data_pipeline/fetcher.py - PokéAPI data fetching
+ - [x]    docker/Dockerfile - Container configuration
  - [ ]    kubernetes/app-deployment.yaml - Kubernetes deployment
 
 ## Development Flow
 
  - [x]    Start by implementing the data pipeline to fetch Pokémon data
  - [x]    Set up Quickwit integration services
- - [ ]    Develop Flask CRUD API endpoints
- - [ ]    Containerize the application
+ - [x]    Develop Flask CRUD API endpoints
+ - [x]    Containerize the application
  - [ ]    Create Kubernetes deployment files
  - [ ]    Set up scripts for easy deployment
 

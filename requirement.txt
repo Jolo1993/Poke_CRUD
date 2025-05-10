@@ -13,3 +13,6 @@ requests==2.31.0
 # Monitoring
 prometheus-flask-exporter==0.22.4
 structlog==23.2.0
+
+# Utils
+pyyaml==6.0.2

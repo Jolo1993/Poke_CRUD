@@ -1,6 +1,6 @@
 {
   "version": "0.7",
-  "index_id": "pokemon",
+  "index_id": "pokemon-v1",
   "doc_mapping": {
     "mode": "dynamic",
     "field_mappings": [

@@ -23,9 +23,22 @@ class QuickwitClient:
         return response.json() if response.content else {}
 
     # Index Management
-    def create_index(self, index_config: Dict) -> Dict:
-        """Create a new index with the given configuration."""
-        return self._request("POST", "/api/v1/indexes", json=index_config)
+
+    def create_index(self, index_config: Dict, format: str = "json") -> Dict:
+        """Create a new index with the given configuration.
+
+        Args:
+            index_config: Either a dictionary (for JSON) or path to YAML file
+            format: 'json' or 'yaml'
+        """
+        if format.lower() == "yaml":
+            with open(index_config, 'rb') as config_file:
+                data = config_file.read()
+            headers = {"content-type": "application/yaml"}
+            return self._request("POST", "/api/v1/indexes", data=data, headers=headers)
+        else:
+            # Your existing JSON implementation
+            return self._request("POST", "/api/v1/indexes", json=index_config)
 
     def delete_index(self, index_id: str) -> Dict:
         """Delete an index by ID."""
