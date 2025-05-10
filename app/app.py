@@ -1,4 +1,4 @@
-from quickwit-client import QuickwitClient
+from quickwit_client import QuickwitClient
 import os
 from flask import Flask, render_template, jsonify, request
 # Now you can import your modules
@@ -82,7 +82,6 @@ def list_indexes():
             index_id = index_config.get('index_id', 'Unknown')
             indexes.append({
                 'id': index_id,
-                'doc_count': doc_count,
                 'description': index_config.get('search_settings', {}).get('default_search_fields', [])
             })
 

@@ -3,12 +3,12 @@ FROM python:3.12-slim as builder
 WORKDIR /build
 
 # Install build dependencies
-COPY ../requirement.txt .
+COPY requirement.txt .
 RUN pip install --no-cache-dir wheel
 RUN pip wheel --no-cache-dir --wheel-dir=/build/wheels -r requirement.txt
 
 # Install local library into wheels
-COPY ../local_libs/ /local_libs/
+COPY local_libs/ /local_libs/
 RUN pip wheel --no-cache-dir --wheel-dir=/build/wheels -e /local_libs/
 
 # Runtime stage
