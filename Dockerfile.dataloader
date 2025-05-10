@@ -1,0 +1,39 @@
+FROM python:3.12-slim
+
+WORKDIR /build
+
+# Install build dependencies
+COPY requirement.txt .
+RUN pip install --no-cache-dir wheel
+RUN pip wheel --no-cache-dir --wheel-dir=/build/wheels -r requirement.txt
+
+# Install local library into wheels
+COPY local_libs/ /local_libs/
+RUN pip wheel --no-cache-dir --wheel-dir=/build/wheels -e /local_libs/
+
+# Runtime stage
+FROM python:3.12-slim AS runtime
+
+# Create a non-root user
+RUN groupadd -r -g 10001 appuser && useradd -r -u 10001 -g appuser appuser
+
+WORKDIR /app
+
+# Copy wheels from builder stage
+COPY --from=builder /build/wheels /wheels
+RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
+    && rm -rf /wheels
+
+# Copy only necessary data loader files
+COPY data_loader/pokemon_api.py .
+COPY schema.json .
+COPY --from=builder /local_libs /local_libs
+
+# Set correct permissions
+RUN chown -R appuser:appuser /app
+
+# Switch to non-root user
+USER 10001
+
+# Run the data loader
+CMD ["python", "pokemon_api.py"]
