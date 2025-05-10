@@ -1,3 +1,4 @@
 quickwit_dev/qwdata/queues/wal-*
 qwdata/*
 __pycache__
+*.egg-info
