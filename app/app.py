@@ -1,4 +1,4 @@
-from quickwit_client import QuickwitClient
+from quickwit-client import QuickwitClient
 import os
 from flask import Flask, render_template, jsonify, request
 # Now you can import your modules
@@ -18,7 +18,10 @@ def index():
 
 @app.route('/search', methods=['POST'])
 def search_endpoint():
-    # Handle POST request with JSON payload
+    # Handle POST request with JSON payloa
+    print("Received search request:")
+    print(f"Content-Type: {request.headers.get('Content-Type')}")
+    print(f"Raw data: {request.data}")
     data = request.get_json()
     if not data:
         return jsonify({'error': 'No JSON data provided'}), 400
