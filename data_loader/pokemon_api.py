@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 QUICKWIT_URL = os.getenv('QUICKWIT_URL', 'http://localhost:7280/')
 POKEMON_API_URL = os.getenv(
     'DATA_URL', 'https://pokeapi.co/api/v2/pokemon').rstrip('/')
-DEFAULT_INDEX_NAME = "pokemon-v1"
+DEFAULT_INDEX_NAME = os.getenv('INDEX_NAME', 'pokemon')
 POKEMON_AMOUNT = int(os.getenv('POKEMON', '10'))
 SCHEMA_PATH = "schema.json"
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'

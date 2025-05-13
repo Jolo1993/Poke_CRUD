@@ -1,0 +1,36 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: poke-dataloader
+spec:
+  schedule: "0 0 */5 * *"  # Every 5 days at midnight
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: poke-dataloader
+              image: ghcr.io/jolo1993/poke-loader:v.2
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: QUICKWIT_URL
+                  value: "quickwit-indexer.quickwit.svc.cluster.local:7280"
+                - name: POKEMON
+                  value: "1025"
+              volumeMounts:
+                - name: schema-volume
+                  mountPath: /app/schema.json
+                  subPath: schema.json
+          volumes:
+            - name: schema-volume
+              configMap:
+                name: pokemon-schema
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pokemon-schema
+data:
+  schema.json: |
+    {"version":"0.7","index_id":"pokemon-v1","doc_mapping":{"mode":"dynamic","field_mappings":[{"name":"id","type":"u64","fast":true,"indexed":true},{"name":"name","type":"text","tokenizer":"default","record":"position","stored":true,"fast":true},{"name":"name_exact","type":"text","tokenizer":"raw","indexed":true,"fast":true},{"name":"types","type":"array<text>","tokenizer":"raw","fast":true,"indexed":true},{"name":"height","type":"f64","fast":true},{"name":"weight","type":"f64","fast":true},{"name":"hp","type":"i64","fast":true},{"name":"attack","type":"i64","fast":true},{"name":"defense","type":"i64","fast":true},{"name":"special_attack","type":"i64","fast":true},{"name":"special_defense","type":"i64","fast":true},{"name":"speed","type":"i64","fast":true},{"name":"abilities","type":"array<text>","tokenizer":"raw","fast":true,"indexed":true},{"name":"hidden_abilities","type":"array<text>","tokenizer":"raw","fast":true,"indexed":true},{"name":"generation","type":"u64","fast":true,"indexed":true},{"name":"evolution_chain","type":"array<u64>","fast":true},{"name":"is_legendary","type":"bool","fast":true},{"name":"is_mythical","type":"bool","fast":true},{"name":"species","type":"text","tokenizer":"raw","fast":true},{"name":"move_names","type":"array<text>","tokenizer":"raw","indexed":true},{"name":"move_types","type":"array<text>","tokenizer":"raw","indexed":true},{"name":"moves_json","type":"json","indexed":false,"stored":true},{"name":"_all_text","type":"text","tokenizer":"default","record":"position"}],"dynamic_mapping":{"tokenizer":"raw","indexed":true,"record":"basic"}},"search_settings":{"default_search_fields":["name","_all_text"]},"indexing_settings":{"commit_timeout_secs":30}}
